@@ -125,12 +125,15 @@ def get_user_last_visit(login, passwd, email):
         return "No such user"
 
     ws.close()
-    date_time = user["last_visit"]
-    date = parse(date_time)
-    current_date = datetime.now()
-    diff = current_date.date() - date.date()
+    try:
+        date_time = user["last_visit"]
+        date = parse(date_time)
+        current_date = datetime.now()
+        diff = current_date.date() - date.date()
 
-    return f'Заходил {date.date().strftime("%d/%m/%y")} в {date.time().strftime("%H:%M")}, {plural_days(diff.days)} назад'
+        return f'Заходил {date.date().strftime("%d/%m/%y")} в {date.time().strftime("%H:%M")}, {plural_days(diff.days)} назад'
+    except:
+        return "Этот пользователь еще не заходил"
 
 def plural_days(n):
     days = ['день', 'дня', 'дней']
