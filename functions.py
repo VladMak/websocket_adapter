@@ -1,10 +1,8 @@
-from flask import Flask, request
 import requests, json
 from datetime import datetime
 from dateutil.parser import parse
 from websocket import create_connection
 
-app = Flask(__name__)
 
 def auth_with_password(login, password):
     resp = requests.post(
@@ -145,65 +143,3 @@ def plural_days(n):
         p = 2
 
     return str(n) + ' ' + days[p]
-
-@app.route("/add_user", methods=["POST"])
-def add_user_func():
-    login = request.form.get('login')
-    passwd = request.form.get('passwd')
-    name = request.form.get('name')
-    email = request.form.get('email')
-    company = request.form.get('company')
-    jobtitle = request.form.get('jobtitle')
-    jobsection = request.form.get('jobsection')
-    comment = request.form.get('comment')
-
-    if login == None or passwd == None or name == None or email == None or company == None or jobtitle == None or jobsection == None or comment == None:
-        return "Invalid params"
-    
-    return add_user(login, passwd, name, email, company, jobtitle, jobsection, comment)
-
-@app.route("/check_activity", methods=["POST"])
-def check_activity_func():
-    login = request.form.get('login')
-    passwd = request.form.get('passwd')
-    email = request.form.get('email')
-    if email == None:
-        return "Invalid params"
-
-    return get_user_last_visit(login, passwd, email)
-
-@app.route("/change_password", methods=["POST"])
-def change_password_func():
-    email = request.form.get('email')
-    password = request.form.get("password")
-    login = request.form.get('login')
-    passwd = request.form.get('passwd')
-    if email == None or password == None:
-        return "Invalid params"
-
-    return change_password(login, passwd, email, password)
-   
- 
-
-@app.route("/check_user_exists", methods=["POST"])
-def check_user_exists_func():
-    login = request.form.get('login')
-    passwd = request.form.get('passwd')
-    email = request.form.get('email')
-    if email == None:
-        return "Invalid params"
-
-    return check_user_exists(login, passwd, email)
-
-@app.route("/change_user_status", methods=["POST"])
-def change_user_status_func():
-    email = request.form.get('email')
-    login = request.form.get('login')
-    passwd = request.form.get('passwd')
-    if email == None:
-        return "Invalid params"
-
-    return change_user_status(login, passwd, email)
-
-if __name__ == "__main__":
-    app.run(host="0.0.0.0", port="80")
