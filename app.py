@@ -58,7 +58,7 @@ def change_user_status_func():
     status = request.form.get("status")
     login = request.form.get('login')
     passwd = request.form.get('passwd')
-    if email == None:
+    if email == None or status == None:
         return "Invalid params"
 
     return change_user_status(login, passwd, email, status)
