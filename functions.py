@@ -1,5 +1,6 @@
 import requests, json
 from datetime import datetime
+from datetime import timedelta
 from dateutil.parser import parse
 from websocket import create_connection
 
@@ -189,7 +190,7 @@ def get_user_last_visit(login, passwd, email):
         date = parse(date_time)
 
         hours = 3
-        date += datetime.timedelta(hours=hours)
+        date += timedelta(hours=hours)
 
         current_date = datetime.now()
         diff = current_date.date() - date.date()
