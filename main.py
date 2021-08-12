@@ -63,7 +63,7 @@ def change_user_status_func():
     return change_user_status(login, passwd, email)
 
 @app.route("/check_user_status", methods=["POST"])
-def change_user_status_func():
+def check_user_status_func():
     email = request.form.get('email')
     login = request.form.get('login')
     passwd = request.form.get('passwd')
