@@ -55,12 +55,13 @@ def check_user_exists_func():
 @app.route("/change_user_status", methods=["POST"])
 def change_user_status_func():
     email = request.form.get('email')
+    status = request.form.get("status")
     login = request.form.get('login')
     passwd = request.form.get('passwd')
     if email == None:
         return "Invalid params"
 
-    return change_user_status(login, passwd, email)
+    return change_user_status(login, passwd, email, status)
 
 @app.route("/check_user_status", methods=["POST"])
 def check_user_status_func():

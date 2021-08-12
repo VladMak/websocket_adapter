@@ -102,7 +102,10 @@ def change_password(login, passwd, email, password):
 
     return "Done"
 
-def change_user_status(login, passwd, email):
+def change_user_status(login, passwd, email, status):
+    if status not in ["manager", "student"]:
+        return "Invalid status"
+
     ws, user = get_user_if_exists(login, passwd, email)
 
     if user == "Invalid login or password":
@@ -111,11 +114,11 @@ def change_user_status(login, passwd, email):
     if user == None:
         ws.close()
         return "No such user"
-    if user["access"] != "manager":
+    if user["access"] == status:
         ws.close()
-        return "User is not a manager"
+        return f"User is already a {status}"
 
-    user["access"] = "student"
+    user["access"] = status
     params = ["name", "email", "access", "id"]
     user_dct = {}
     for p in params:
