@@ -73,7 +73,7 @@ def check_user_status_func():
 
     return check_user_status(login, passwd, email)
 
-@app.route("/get_all_groups", methods=["POST"]):
+@app.route("/get_all_groups", methods=["POST"])
 def get_all_groups_func():
     login = request.form.get('login')
     passwd = request.form.get('passwd')
