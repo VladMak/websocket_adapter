@@ -40,6 +40,24 @@ def get_all_users(ws):
     data = ws.recv()
     return json.loads(data[9:-1])
 
+def get_all_groups(ws):
+    ws.send('424["api",["CoursesGetAll",null]]')
+    data = ws.recv()
+    return json.loads(data[9:-1])
+
+def get_all_groups_names(login, passwd):
+    token = auth_with_password(login, passwd)
+    ws = auth_with_token(token)
+    groups = get_all_groups(ws)
+    ws.close()
+
+    names = ""
+    for group in groups:
+        names += group["title"]
+        names += "\n"
+    
+    return names
+
 def get_user_if_exists(login, passwd, email):
     token = auth_with_password(login, passwd)
     if token == "Invalid login or password":
