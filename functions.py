@@ -25,7 +25,7 @@ def auth_with_token(token):
         ws.recv()
     return ws
 
-def add_user(login, passwd, name, email, company, jobtitle, jobsection, comment):
+def add_user(login, passwd, name, email, company, jobtitle, jobsection, comment, title):
     token = auth_with_password(login, passwd)
     if token == "Invalid login or password":
         return token
@@ -33,7 +33,8 @@ def add_user(login, passwd, name, email, company, jobtitle, jobsection, comment)
     ws.send(f'4235["api",["UserUpdate",{{"name":"{name}","email":"{email}","access":"manager","avatar":"","company":"{company}","jobtitle":"{jobtitle}","jobsection":"{jobsection}","language":"","licencefree":false,"disableProfileEdit":false,"password":"","password_repeat":"","comment":"{comment}"}}]]')
     ws.recv()
     ws.close()
-    return "Done"
+
+    return add_user_to_group(login, passwd, email, title)
 
 def get_all_users(ws):
     ws.send('423["api",["UsersGetAll",null]]')
@@ -69,6 +70,30 @@ def get_user_if_exists(login, passwd, email):
             return ws, user
     
     return ws, None
+
+def get_group_if_exists(ws, title):
+    groups = get_all_groups(ws)
+    for group in groups:
+        if group["title"] == title:
+            return ws, group
+    
+    return ws, None
+
+def add_user_to_group(login, passwd, email, title):
+    ws, user = get_user_if_exists(login, passwd, email)
+    user_id = user["id"]
+
+    ws, group = get_group_if_exists(ws, title)
+    if group == None:
+        return "User was created, but group name is incorrect"
+    department_id = group["id"]
+
+    ws.send(f"""4235["api",["DepartmentManagerAssign",{{"user_id":"{user_id}","department_id":"{department_id}"}}]]""")
+    ws.close()
+
+    return "Done"
+
+
 
 def check_user_status(login, passwd, email):
     ws, user = get_user_if_exists(login, passwd, email)

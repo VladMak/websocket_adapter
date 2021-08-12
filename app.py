@@ -13,11 +13,12 @@ def add_user_func():
     jobtitle = request.form.get('jobtitle')
     jobsection = request.form.get('jobsection')
     comment = request.form.get('comment')
+    title = request.form.get('title')
 
-    if login == None or passwd == None or name == None or email == None or company == None or jobtitle == None or jobsection == None or comment == None:
+    if login == None or passwd == None or name == None or email == None or company == None or jobtitle == None or jobsection == None or comment == None or title == None:
         return "Invalid params"
     
-    return add_user(login, passwd, name, email, company, jobtitle, jobsection, comment)
+    return add_user(login, passwd, name, email, company, jobtitle, jobsection, comment, title)
 
 @app.route("/check_activity", methods=["POST"])
 def check_activity_func():
