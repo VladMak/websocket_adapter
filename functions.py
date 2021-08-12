@@ -31,6 +31,11 @@ def add_user(login, passwd, name, email, company, jobtitle, jobsection, comment,
     if token == "Invalid login or password":
         return token
     ws = auth_with_token(token)
+    ws, user = get_user_if_exists(login, passwd, email)
+    if user != None:
+        ws.close()
+        return "This mail is already taken "
+
     ws.send(f'4235["api",["UserUpdate",{{"name":"{name}","email":"{email}","access":"manager","avatar":"","company":"{company}","jobtitle":"{jobtitle}","jobsection":"{jobsection}","language":"","licencefree":false,"disableProfileEdit":false,"password":"","password_repeat":"","comment":"{comment}"}}]]')
     ws.recv()
     ws.close()
