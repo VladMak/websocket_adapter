@@ -41,9 +41,9 @@ def get_all_users(ws):
     return json.loads(data[9:-1])
 
 def get_all_groups(ws):
-    ws.send('424["api",["CoursesGetAll",null]]')
+    ws.send('4231["api",["DepartmentsGetAll",null]]')
     data = ws.recv()
-    return json.loads(data[9:-1])
+    return json.loads(data[10:-1])
 
 def get_all_groups_names(login, passwd):
     token = auth_with_password(login, passwd)
