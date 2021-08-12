@@ -185,6 +185,8 @@ def get_user_last_visit(login, passwd, email):
         return "No such user"
 
     ws.close()
+    if user["state"] == "online":
+        return "Этот пользователь онлайн"
     try:
         date_time = user["last_visit"]
         date = parse(date_time)
