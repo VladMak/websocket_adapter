@@ -187,8 +187,13 @@ def get_user_last_visit(login, passwd, email):
     try:
         date_time = user["last_visit"]
         date = parse(date_time)
+
+        hours = 3
+        date += datetime.timedelta(hours=hours)
+
         current_date = datetime.now()
         diff = current_date.date() - date.date()
+
 
         return f'Заходил {date.date().strftime("%d/%m/%y")} в {date.time().strftime("%H:%M")}, {plural_days(diff.days)} назад'
     except:
