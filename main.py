@@ -1,5 +1,5 @@
 from flask import Flask, request
-from functions import add_user, get_user_last_visit, change_password, check_user_exists, change_user_status
+from functions import add_user, get_user_last_visit, change_password, check_user_exists, change_user_status, check_user_status
 
 app = Flask(__name__)
 
@@ -61,6 +61,16 @@ def change_user_status_func():
         return "Invalid params"
 
     return change_user_status(login, passwd, email)
+
+@app.route("/check_user_status", methods=["POST"])
+def change_user_status_func():
+    email = request.form.get('email')
+    login = request.form.get('login')
+    passwd = request.form.get('passwd')
+    if email == None:
+        return "Invalid params"
+
+    return check_user_status(login, passwd, email)
 
 # if __name__ == "__main__":
 #     app.run(host="0.0.0.0", port="8080")

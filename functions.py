@@ -52,6 +52,19 @@ def get_user_if_exists(login, passwd, email):
     
     return ws, None
 
+def check_user_status(login, passwd, email):
+    ws, user = get_user_if_exists(login, passwd, email)
+
+    if user == "Invalid login or password":
+        return user
+
+    ws.close()
+
+    if user == None:
+        return "No such user"
+    else:
+        return user["access"]
+
 def check_user_exists(login, passwd, email):
     ws, user = get_user_if_exists(login, passwd, email)
 
