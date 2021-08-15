@@ -36,11 +36,11 @@ def add_user(login, passwd, name, email, company, jobtitle, jobsection, comment,
         ws.close()
         return "This mail is already taken "
 
-    ws.send(f'4235["api",["UserUpdate",{{"name":"{name}","email":"{email}","access":"manager","avatar":"","company":"{company}","jobtitle":"{jobtitle}","jobsection":"{jobsection}","language":"","licencefree":false,"disableProfileEdit":false,"password":"","password_repeat":"","comment":"{comment}"}}]]')
+    ws.send(f'4235["api",["UserUpdate",{{"name":"{name}","email":"{email}","access":"student","avatar":"","company":"{company}","jobtitle":"{jobtitle}","jobsection":"{jobsection}","language":"","licencefree":false,"disableProfileEdit":false,"password":"","password_repeat":"","comment":"{comment}"}}]]')
     ws.recv()
     ws.close()
 
-    return add_user_to_group(login, passwd, email, title)
+    return "Done"
 
 def get_all_users(ws):
     ws.send('423["api",["UsersGetAll",null]]')
@@ -87,18 +87,41 @@ def get_group_if_exists(ws, title):
 
 def add_user_to_group(login, passwd, email, title):
     ws, user = get_user_if_exists(login, passwd, email)
+    if user == None:
+        return "No such user"
     user_id = user["id"]
 
     ws, group = get_group_if_exists(ws, title)
     if group == None:
-        return "User was created, but group name is incorrect"
+        return "No such group"
     department_id = group["id"]
 
-    ws.send(f"""4235["api",["DepartmentManagerAssign",{{"user_id":"{user_id}","department_id":"{department_id}"}}]]""")
+    ws.send(f"""4235["api",["DepartmentUserAssign",{{"user_id":"{user_id}","department_id":"{department_id}"}}]]""")
     ws.close()
 
     return "Done"
 
+def check_user_in_group(login, passwd, email, title):
+    ws, user = get_user_if_exists(login, passwd, email)
+    if user == None:
+        return "No such user"
+    user_id = user["id"]
+
+    ws.send(f"""4237["api",["DepartmentsWithUsers",null]]""")
+    data = ws.recv()
+    ws.close()
+    groups = json.loads(data[10:-1])
+
+    for group in groups:
+        if group["title"] == title:
+            if user_id in group["users"]:
+                return "User in this group"
+            else:
+                return "No such user in this group"
+
+    return "No such group"
+
+print(check_user_in_group("context.piar@ya.ru", "nHpR9PDFC!@*is", "mail@mail.ru", "Тестовая группа01"))
 
 
 def check_user_status(login, passwd, email):
