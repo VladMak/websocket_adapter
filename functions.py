@@ -97,10 +97,14 @@ def add_user_to_courses_group(login, passwd, email, title):
     user_id = user["id"]
 
     group_courses = get_all_group_courses(ws)
+    courses = None
     for group in group_courses:
         if group["title"] == title:
             courses = group["courses"]
             break
+
+    if courses == None:
+        return "No such group"
     
     for course in courses:
         assign_user_for_courses(ws, user_id, course["course_id"])
