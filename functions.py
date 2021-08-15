@@ -7,7 +7,7 @@ from websocket import create_connection
 
 def auth_with_password(login, password):
     resp = requests.post(
-                    "https://1460.unicraft.org/api/v2/auth/credentials", 
+                    "https://a.hr-tv.ru/api/v2/auth/credentials", 
                     data = {"Content-Type": "application/json", 
                             "email": login,
                             "password": password}
@@ -20,7 +20,7 @@ def auth_with_password(login, password):
     return token
 
 def auth_with_token(token):
-    ws = create_connection("wss://1460.unicraft.org/socket.io/?EIO=3&transport=websocket")
+    ws = create_connection("wss://a.hr-tv.ru/socket.io/?EIO=3&transport=websocket")
     ws.send(f'420["auth","{token}"]'.encode())
     for _ in range(5):
         ws.recv()
