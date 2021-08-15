@@ -85,6 +85,40 @@ def get_group_if_exists(ws, title):
     
     return ws, None
 
+def add_user_to_courses_group(login, passwd, email, title):
+    token = auth_with_password(login, passwd)
+    if token == "Invalid login or password":
+        return None, token
+    ws = auth_with_token(token)
+
+    ws, user = get_user_if_exists(login, passwd, email)
+    if user == None:
+        return "No such user"
+    user_id = user["id"]
+
+    group_courses = get_all_group_courses(ws)
+    for group in group_courses:
+        if group["title"] == title:
+            courses = group["courses"]
+            break
+    
+    for course in courses:
+        assign_user_for_courses(ws, user_id, course["course_id"])
+
+    ws.close()
+    return "Done"
+
+def assign_user_for_courses(ws, user_id, course_id):
+    ws.send(f"""42107["api",["UserCourseIndividualBulk",{{"course_id":"{course_id}","assign":["{user_id}"],"unassign":[],"ucDeadlinesAt":{{}},"clientsTimeZoneOffset":-180}}]]""")
+    ws.recv()
+
+def get_all_group_courses(ws):
+    ws.send(f"""4231["api",["DepartmentsGetAll",null]]""")
+    data = ws.recv()
+    courses = json.loads(data[10:-1])
+
+    return courses
+
 def add_user_to_group(login, passwd, email, title):
     ws, user = get_user_if_exists(login, passwd, email)
     if user == None:
@@ -120,9 +154,6 @@ def check_user_in_group(login, passwd, email, title):
                 return "No such user in this group"
 
     return "No such group"
-
-print(check_user_in_group("context.piar@ya.ru", "nHpR9PDFC!@*is", "mail@mail.ru", "Тестовая группа01"))
-
 
 def check_user_status(login, passwd, email):
     ws, user = get_user_if_exists(login, passwd, email)
