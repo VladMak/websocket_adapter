@@ -26,7 +26,7 @@ def auth_with_token(token):
         ws.recv()
     return ws
 
-def add_user(login, passwd, name, email, company, jobtitle, jobsection, comment, title):
+def add_user(login, passwd, name, email, company, jobtitle, jobsection, comment):
     token = auth_with_password(login, passwd)
     if token == "Invalid login or password":
         return token
