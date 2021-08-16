@@ -52,9 +52,7 @@ def get_all_groups(ws):
 
 def get_all_groups_names(login, passwd):
     token = auth_with_password(login, passwd)
-    print(token)
     ws = auth_with_token(token)
-    print(ws)
     groups = get_all_groups(ws)
     ws.close()
 
