@@ -8,11 +8,9 @@ from websocket import create_connection
 def auth_with_password(login, password):
     resp = requests.post(
                     "https://a.hr-tv.ru/api/v2/auth/credentials", 
-                    data = {"Content-Type": "application/json", 
-                            "email": login,
+                    json = {"email": login,
                             "password": password}
                     )
-
     try:
         token = resp.json()["token"]
     except:
@@ -54,7 +52,9 @@ def get_all_groups(ws):
 
 def get_all_groups_names(login, passwd):
     token = auth_with_password(login, passwd)
+    print(token)
     ws = auth_with_token(token)
+    print(ws)
     groups = get_all_groups(ws)
     ws.close()
 
