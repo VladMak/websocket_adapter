@@ -1,4 +1,4 @@
-import requests, json
+import requests, json, threading
 from datetime import datetime
 from datetime import timedelta
 from dateutil.parser import parse
@@ -95,6 +95,7 @@ def add_user_to_courses_group(login, passwd, email, title):
     user_id = user["id"]
 
     group_courses = get_all_group_courses(ws)
+    ws.close()
     courses = None
     for group in group_courses:
         if group["title"] == title:
@@ -103,16 +104,18 @@ def add_user_to_courses_group(login, passwd, email, title):
 
     if courses == None:
         return "No such group"
-    
-    for course in courses:
-        assign_user_for_courses(ws, user_id, course["course_id"])
 
-    ws.close()
+    for i in range(4):
+        threading.Thread(target=assign_user_for_courses, args=(token, courses[i::4], user_id)).start()
+
     return "Done"
 
-def assign_user_for_courses(ws, user_id, course_id):
-    ws.send(f"""42107["api",["UserCourseIndividualBulk",{{"course_id":"{course_id}","assign":["{user_id}"],"unassign":[],"ucDeadlinesAt":{{}},"clientsTimeZoneOffset":-180}}]]""")
-    ws.recv()
+def assign_user_for_courses(token, courses, user_id):
+    ws = auth_with_token(token)
+    for course in courses:
+        ws.send(f"""42107["api",["UserCourseIndividualBulk",{{"course_id":"{course["course_id"]}","assign":["{user_id}"],"unassign":[],"ucDeadlinesAt":{{}},"clientsTimeZoneOffset":-180}}]]""")
+        ws.recv()
+    ws.close()
 
 def get_all_group_courses(ws):
     ws.send(f"""4231["api",["DepartmentsGetAll",null]]""")
