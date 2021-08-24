@@ -115,6 +115,8 @@ def get_all_groups_func():
     return get_all_groups_names(login, passwd)
 
 
+
+
 # первоначальная оплата
 @app.route("/set_first_pay", methods=["POST"])
 def set_first_pay():
@@ -128,21 +130,21 @@ def set_first_pay():
 
 # сведения о платеже. Тут получаем BindingId, только после оплаты
 @app.route("/get_binding", methods=["POST"])
-def set_first_pay():
+def get_binding():
     odredId = request.form.get('orderId')
 
     return getOrderStatusExtended_do(odredId)
 
 # платеж с настройками автоплатежа.
 @app.route("/set_rec_pay", methods=["POST"])
-def set_first_pay():
+def set_rec_pay():
     bindingId = request.form.get('bindingId')
 
     return register_do(odredId)
 
 # активация связки
 @app.route("/activate_binding", methods=["POST"])
-def set_first_pay():
+def activate_binding():
     bindingId = request.form.get('bindingId')
     mdOrder = request.form.get('mdOrder')
     ip = request.form.get('ip')
@@ -151,7 +153,7 @@ def set_first_pay():
 
 # финальный статус
 @app.route("/final_status", methods=["POST"])
-def set_first_pay():
+def final_status():
     orderId = request.form.get('orderId')
 
     return final_getOrderStatusExtended_do(orderId)
