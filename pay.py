@@ -35,7 +35,7 @@ def register_do(bindingId):
 
     print(resp.url)
     print(resp.json())
-    return resp.json()["orderId"] 
+    return resp.json()
 
 def paymentOrderBinding_do(bindingId, mdOrder, ip):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/paymentOrderBinding.do", data = {
@@ -67,8 +67,8 @@ def getOrderStatusExtended_do(orderId):
 
     #print(resp.json())
     #print(resp.json()["attributes"][0]["value"]) #mdOrder
-    print(resp.json())
-    #return (resp.json()["bindingInfo"]["bindingId"], resp.json()["ip"], resp.json()["attributes"][0]["value"])
+    #print(resp.json())
+    return resp.json()#(resp.json()["bindingInfo"]["bindingId"], resp.json()["ip"], resp.json()["attributes"][0]["value"])
 
 def final_getOrderStatusExtended_do(orderId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/getOrderStatusExtended.do", data = {
