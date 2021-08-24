@@ -277,3 +277,7 @@ def plural_days(n):
         p = 2
 
     return str(n) + ' ' + days[p]
+
+# Эквайринг
+def test():
+    pass

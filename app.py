@@ -1,5 +1,6 @@
 from flask import Flask, request
 from functions import add_user, get_user_last_visit, change_password, check_user_exists, change_user_status, check_user_status, get_all_groups_names, add_user_to_group, check_user_in_group, add_user_to_courses_group
+from pay import first_register_do
 
 app = Flask(__name__)
 
@@ -112,6 +113,18 @@ def get_all_groups_func():
     passwd = request.form.get('passwd')
 
     return get_all_groups_names(login, passwd)
+
+
+# первоначальная оплата
+@app.route("/set_first_pay", methods=["POST"])
+def set_first_pay():
+    userName = request.form.get('userName')
+    password = request.form.get('password')
+    orderNumber = request.form.get('orderNumber')
+    amount = request.form.get('amount')
+    clientId = request.form.get('clientId')
+
+    return first_register_do(userName, password, orderNumber, amount, clientId)
 
 # if __name__ == "__main__":
 #     app.run(host="0.0.0.0", port="8080")
