@@ -18,7 +18,7 @@ def first_register_do(orderNumber, amount, clientId):
 
     #print(resp.url)
     #print(resp.json())
-    return resp.json()["orderId"] 
+    return (resp.json()["orderId"], resp.url)
 
 def register_do(bindingId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/register.do", data = {
@@ -67,7 +67,8 @@ def getOrderStatusExtended_do(orderId):
 
     #print(resp.json())
     #print(resp.json()["attributes"][0]["value"]) #mdOrder
-    return (resp.json()["bindingInfo"]["bindingId"], resp.json()["ip"], resp.json()["attributes"][0]["value"])
+    print(resp.json())
+    #return (resp.json()["bindingInfo"]["bindingId"], resp.json()["ip"], resp.json()["attributes"][0]["value"])
 
 def final_getOrderStatusExtended_do(orderId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/getOrderStatusExtended.do", data = {
@@ -78,8 +79,7 @@ def final_getOrderStatusExtended_do(orderId):
 
     return resp.json()
 
-if __name__ == '__main__':
-    
+def main():
     orderId = first_register_do() #первоначальный платеж. Тут получаем OrderId
     (bindingId, ip, mdOrder) = getOrderStatusExtended_do(orderId) #сведения о платеже. Тут получаем BindingId, только после оплаты клиентом
     orderId = register_do(bindingId) #платеж с настройками автоплатежа.
@@ -87,3 +87,13 @@ if __name__ == '__main__':
     
     paymentOrderBinding_do(bindingId, mdOrder, ip)
     final_getOrderStatusExtended_do(orderId)
+
+if __name__ == '__main__':
+    main()
+    #orderId = first_register_do() #первоначальный платеж. Тут получаем OrderId
+    #(bindingId, ip, mdOrder) = getOrderStatusExtended_do(orderId) #сведения о платеже. Тут получаем BindingId, только после оплаты клиентом
+    #orderId = register_do(bindingId) #платеж с настройками автоплатежа.
+    
+    
+    #paymentOrderBinding_do(bindingId, mdOrder, ip)
+    #final_getOrderStatusExtended_do(orderId)
