@@ -1,6 +1,6 @@
 from flask import Flask, request
 from functions import add_user, get_user_last_visit, change_password, check_user_exists, change_user_status, check_user_status, get_all_groups_names, add_user_to_group, check_user_in_group, add_user_to_courses_group
-from pay import first_register_do
+from pay import first_register_do, register_do, paymentOrderBinding_do, getBindings_do, getOrderStatusExtended_do, final_getOrderStatusExtended_do
 
 app = Flask(__name__)
 
@@ -125,6 +125,37 @@ def set_first_pay():
     clientId = request.form.get('clientId')
 
     return first_register_do(userName, password, orderNumber, amount, clientId)
+
+# сведения о платеже. Тут получаем BindingId, только после оплаты
+@app.route("/get_binding", methods=["POST"])
+def set_first_pay():
+    odredId = request.form.get('orderId')
+
+    return getOrderStatusExtended_do(odredId)
+
+# платеж с настройками автоплатежа.
+@app.route("/set_rec_pay", methods=["POST"])
+def set_first_pay():
+    bindingId = request.form.get('bindingId')
+
+    return register_do(odredId)
+
+# активация связки
+@app.route("/activate_binding", methods=["POST"])
+def set_first_pay():
+    bindingId = request.form.get('bindingId')
+    mdOrder = request.form.get('mdOrder')
+    ip = request.form.get('ip')
+
+    return paymentOrderBinding_do(bindingId, mdOrder, ip)
+
+# финальный статус
+@app.route("/final_status", methods=["POST"])
+def set_first_pay():
+    orderId = request.form.get('orderId')
+
+    return final_getOrderStatusExtended_do(orderId)
+
 
 # if __name__ == "__main__":
 #     app.run(host="0.0.0.0", port="8080")

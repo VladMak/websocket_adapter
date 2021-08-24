@@ -1,9 +1,12 @@
 import requests, json
 
-def first_register_do(userName, password, orderNumber, amount, clientId):
+UserName = "T772370181045-api"
+Password = "T772370181045"
+
+def first_register_do(orderNumber, amount, clientId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/register.do", data = {
-        "userName":userName,
-        "password":password,
+        "userName":UserName,
+        "password":Password,
         "orderNumber":orderNumber,
         "amount":amount,
         "clientId":clientId,
@@ -19,8 +22,8 @@ def first_register_do(userName, password, orderNumber, amount, clientId):
 
 def register_do(bindingId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/register.do", data = {
-        "userName":"T772370181045-api",
-        "password":"T772370181045",
+        "userName":UserName,
+        "password":Password,
         "orderNumber":"-8",
         "amount":"100",
         "clientId":"mva",
@@ -36,19 +39,19 @@ def register_do(bindingId):
 
 def paymentOrderBinding_do(bindingId, mdOrder, ip):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/paymentOrderBinding.do", data = {
-        "userName":"T772370181045-api",
-        "password":"T772370181045",
+        "userName":UserName,
+        "password":Password,
         "mdOrder":mdOrder,
         "bindingId":bindingId,
         "ip":ip
     })
 
-    print(resp.json())
+    return resp.json()
 
 def getBindings_do():
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/getBindings.do", data = {
-        "userName":"T772370181045-api",
-        "password":"T772370181045",
+        "userName":UserName,
+        "password":Password,
         "clientId":"mva",
         "bindingType":"CR"
     })
@@ -57,8 +60,8 @@ def getBindings_do():
 
 def getOrderStatusExtended_do(orderId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/getOrderStatusExtended.do", data = {
-        "userName":"T772370181045-api",
-        "password":"T772370181045",
+        "userName":UserName,
+        "password":Password,
         "orderId":orderId
     })
 
@@ -68,24 +71,19 @@ def getOrderStatusExtended_do(orderId):
 
 def final_getOrderStatusExtended_do(orderId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/getOrderStatusExtended.do", data = {
-        "userName":"T772370181045-api",
-        "password":"T772370181045",
+        "userName":UserName,
+        "password":Password,
         "orderId":orderId
     })
 
-    print(resp.json())
+    return resp.json()
 
 if __name__ == '__main__':
-    #orderId = "78b69530-c1ef-776f-a5be-212827e3a83c"
     
     orderId = first_register_do() #первоначальный платеж. Тут получаем OrderId
     (bindingId, ip, mdOrder) = getOrderStatusExtended_do(orderId) #сведения о платеже. Тут получаем BindingId, только после оплаты клиентом
     orderId = register_do(bindingId) #платеж с настройками автоплатежа.
     
-    #orderId = "3470701d-0025-7c62-a8c4-e1ab27e3a83c"
     
     paymentOrderBinding_do(bindingId, mdOrder, ip)
     final_getOrderStatusExtended_do(orderId)
-
-#72a10429-17e3-70bb-8a70-356127e3a83c - OrderId
-#bfc7b652-f628-7e62-a7e2-e5d727e3a83c - BindingId
