@@ -137,8 +137,11 @@ def get_binding():
 @app.route("/set_rec_pay", methods=["POST"])
 def set_rec_pay():
     bindingId = request.form.get('bindingId')
+    orderNumber = request.form.get('orderNumber')
+    amount = request.form.get('amount')
+    clientId = request.form.get('clientId')
 
-    return register_do(bindingId)
+    return register_do(bindingId, orderNumber, amount, clientId)
 
 # активация связки
 @app.route("/activate_binding", methods=["POST"])

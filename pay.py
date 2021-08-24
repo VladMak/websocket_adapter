@@ -20,13 +20,13 @@ def first_register_do(orderNumber, amount, clientId):
     #print(resp.json())
     return resp.json()#resp.json()["orderId"]
 
-def register_do(bindingId):
+def register_do(bindingId, orderNumber, amount, clientId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/register.do", data = {
         "userName":UserName,
         "password":Password,
-        "orderNumber":"-8",
-        "amount":"100",
-        "clientId":"mva",
+        "orderNumber":orderNumber,
+        "amount":amount,
+        "clientId":clientId,
         "bindingId":bindingId,
         "features":"AUTO_PAYMENT",
         "returnUrl":"https://hr-tv.ru/successpayment",
