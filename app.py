@@ -129,9 +129,9 @@ def set_first_pay():
 # сведения о платеже. Тут получаем BindingId, только после оплаты
 @app.route("/get_binding", methods=["POST"])
 def get_binding():
-    odredId = request.form.get('orderId')
+    orderId = request.form.get('orderId')
 
-    return getOrderStatusExtended_do(odredId)
+    return getOrderStatusExtended_do(orderId)
 
 # платеж с настройками автоплатежа.
 @app.route("/set_rec_pay", methods=["POST"])
