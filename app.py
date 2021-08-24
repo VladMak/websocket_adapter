@@ -120,13 +120,11 @@ def get_all_groups_func():
 # первоначальная оплата
 @app.route("/set_first_pay", methods=["POST"])
 def set_first_pay():
-    userName = request.form.get('userName')
-    password = request.form.get('password')
     orderNumber = request.form.get('orderNumber')
     amount = request.form.get('amount')
     clientId = request.form.get('clientId')
 
-    return first_register_do(userName, password, orderNumber, amount, clientId)
+    return first_register_do(orderNumber, amount, clientId)
 
 # сведения о платеже. Тут получаем BindingId, только после оплаты
 @app.route("/get_binding", methods=["POST"])
