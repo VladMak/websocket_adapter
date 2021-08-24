@@ -138,7 +138,7 @@ def get_binding():
 def set_rec_pay():
     bindingId = request.form.get('bindingId')
 
-    return register_do(odredId)
+    return register_do(bindingId)
 
 # активация связки
 @app.route("/activate_binding", methods=["POST"])

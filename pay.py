@@ -80,13 +80,14 @@ def final_getOrderStatusExtended_do(orderId):
     return resp.json()
 
 def main():
-    orderId = first_register_do() #первоначальный платеж. Тут получаем OrderId
-    (bindingId, ip, mdOrder) = getOrderStatusExtended_do(orderId) #сведения о платеже. Тут получаем BindingId, только после оплаты клиентом
-    orderId = register_do(bindingId) #платеж с настройками автоплатежа.
+    orderId = "41ca55b1-fa15-7d80-8972-5bf027e3a83c" #первоначальный платеж. Тут получаем OrderId
+    result = getOrderStatusExtended_do(orderId) #сведения о платеже. Тут получаем BindingId, только после оплаты клиентом
+    print(result)
+    #orderId = register_do(bindingId) #платеж с настройками автоплатежа.
     
     
-    paymentOrderBinding_do(bindingId, mdOrder, ip)
-    final_getOrderStatusExtended_do(orderId)
+    #paymentOrderBinding_do(bindingId, mdOrder, ip)
+    #final_getOrderStatusExtended_do(orderId)
 
 if __name__ == '__main__':
     main()
