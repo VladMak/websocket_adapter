@@ -18,7 +18,7 @@ def first_register_do(orderNumber, amount, clientId):
 
     #print(resp.url)
     #print(resp.json())
-    return (resp.json()["orderId"], resp.url)
+    return resp.json()#resp.json()["orderId"]
 
 def register_do(bindingId):
     resp = requests.post("https://3dsec.sberbank.ru/payment/rest/register.do", data = {
